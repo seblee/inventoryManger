@@ -11,7 +11,7 @@
 	},
 	"appid": "wxabf65e68a5380a16",
 	"projectname": "inventoryManger",
-	"libVersion": "2.8.1",
+	"libVersion": "2.9.4",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",

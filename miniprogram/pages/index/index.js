@@ -74,40 +74,10 @@ Page({
 
   },
 
-  onAdd: function () {
-    const db = wx.cloud.database()
-    db.collection('inventoryCategory').add({
-      data: {
-        name: '润滑油',
-        unit: '桶',
-        isDel: false,
-        noteDate: new Date(),
-      },
-
-      success: res => {
-        wx.showToast({
-          title: '增加物品名称成功',
-          icon: 'success',
-          image: '',
-          duration: 1500,
-        })
-        console.log('onAdd success', res)
-      },
-      fail: err => {
-        console.log('onAdd fail', err)
-        wx.showToast({
-          title: '添加失败',
-          icon: 'none',
-          image: '',
-          duration: 1500,
-        })
-      }
-    })
-  },
 
   onAddRecord: function () {
     const db = wx.cloud.database()
-    db.collection('inventoryCategory').add({
+    db.collection('inventoryNote').add({
       data: {
         categoryId: '',//类别ID
         description: '',//备注描述
@@ -120,7 +90,7 @@ Page({
 
       success: res => {
         wx.showToast({
-          title: '增加物品名称成功',
+          title: '增加记录成功',
           icon: 'success',
           image: '',
           duration: 1500,

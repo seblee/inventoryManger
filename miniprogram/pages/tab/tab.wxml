@@ -1,0 +1,63 @@
+
+
+
+<view hidden="{{active !== 'addcategory'}}">
+  <addcategory
+    id='addcategory'    
+  />
+</view>
+<view hidden="{{active !== 'list'}}">
+  <list
+    id='list'    
+  />
+</view>
+<view hidden="{{active !== 'addrecord'}}">
+  <addrecord
+    id='addrecord'    
+  />
+</view>
+
+
+
+ 
+
+
+<cover-view
+    class="tab-item-top left {{active === 'addcategory' ? 'active-bottom-tab' : ''}}"
+    bindtap="goTo"
+    bindlongtap="showIconName"
+    data-active="addcategory"
+    hidden="{{hideTab}}"
+  >
+    <cover-image
+      style="{{scale === 'addcategory' ? 'transform: scale(.8, .8)' : ''}}"
+      class="icon-tab-left"
+      src="../../images/app.png"
+    ></cover-image>
+  </cover-view>
+  <cover-view
+    class="tab-item-top middle {{active === 'list' ? 'active-bottom-tab' : ''}}"
+    bindtap="goTo"
+    bindlongtap="showIconName"
+    data-active="list"
+    hidden="{{hideTab}}"
+  >
+    <cover-image
+      style="{{scale === 'list' ? 'transform: scale(.8, .8)' : ''}}"
+      class="icon-tab-middle"
+      src="../../images/message.png"
+    ></cover-image>
+  </cover-view>
+  <cover-view
+    class="tab-item-top right {{active === 'addrecord' ? 'active-bottom-tab' : ''}}"
+    bindtap="goTo"
+    bindlongtap="showIconName"
+    data-active="addrecord"
+    hidden="{{hideTab}}"
+  >
+    <cover-image
+      style="{{scale === 'addrecord' ? 'transform: scale(.8, .8);' : ''}}"
+      class="icon-tab-right"
+      src="../../images/tongue.png"
+    ></cover-image>
+  </cover-view>

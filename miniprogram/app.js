@@ -30,9 +30,9 @@ App({
       fail: function (res) { },
       complete: function (res) { },
     })
-    this.getCategory()
+
     // this.globalData = {}
-    console.log('this.globalData', this.globalData)
+    console.log('globalData', this.globalData)
 
   },
   globalData: {
@@ -55,26 +55,5 @@ App({
     })
   },
 
-  getCategory() {
-    const defaultCategoryList = []
-    wx.cloud.callFunction({
-      name: 'getCategory',
-      data: {},
-      success: res => {
-        console.log('getCategory sucess', res)
-        if (res.result.code === 1) {
-          const list = res.result.data
-          list.forEach((item) => {
-            defaultCategoryList.push(item)
-          })
-          this.globalData.defaultCategoryList = defaultCategoryList 
-        }
-      },
-      fail: err => {
-        console.log('getCategory fail', err)
-      }
-    })
 
-
-  }
 })

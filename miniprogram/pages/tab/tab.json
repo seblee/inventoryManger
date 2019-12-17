@@ -1,0 +1,8 @@
+{
+  "component": true,
+   "usingComponents": {
+    "list":"../../components/list/list",
+    "addcategory": "../../components/addCategory/addCategory",
+    "addrecord": "../../components/addRecord/addRecord"
+  }
+}
