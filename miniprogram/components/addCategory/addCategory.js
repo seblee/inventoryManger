@@ -14,10 +14,19 @@ Component({
     unitArray: ['kg', '个', '包', '桶', 'L'],
     unitIndex: 0,
     categoryName: '',
-    discription: '',
+    description: '',
     barCode: '',
+    isEdit: false,
+    _id: '',
+    unit: 'kg',
   },
 
+  lifetimes: {
+    // 生命周期函数，可以为函数，或一个在methods段中定义的方法名
+    attached: function () { },
+    moved: function () { },
+    detached: function () { },
+  },
   /**
    * 组件的方法列表
    */
@@ -27,7 +36,7 @@ Component({
      * form submit 函数
      */
     formSubmit: function (e) {
-      if (this.data.categoryName.length === 0) {
+      if (e.detail.value.categoryName.length === 0) {
         wx.vibrateShort()
         wx.showToast({
           title: '名字不能为空啊！',
@@ -36,8 +45,15 @@ Component({
         return
       }
       this.onAddCategory()
+      this.formReset()
     },
-
+    formReset: function () {
+      this.setData({
+        description: '',
+        categoryName: '',
+        barCode: '',
+      })
+    },
     /**
      * input 输入触发函数
      */
@@ -61,22 +77,35 @@ Component({
     */
     inputDescription: function (e) {
       this.setData({
-        discription: e.detail.value
+        description: e.detail.value
+      })
+    },
+
+    /**
+     * unitPickerChange change触发函数
+     */
+    unitPickerChange: function (e) {
+      console.log('unitIndex:', this.data.unitIndex)
+      this.setData({
+        unit: this.data.unitArray[e.detail.value]
       })
     },
 
     /**
      * 添加物品类型
      */
-    onAddCategory: function () {
+    onAddCategory: function (data) {
       const db = wx.cloud.database()
+      const { _id, categoryName, unit, description, barCode, isEdit } = this.data;
       db.collection('inventoryCategory').add({
         data: {
-          name: this.data.categoryName,
-          unit: this.data.unitArray[this.data.unitIndex],
+          categoryName: categoryName,
+          unit: unit,
           isDel: false,
           noteDate: new Date(),
-          discription: this.data.discription,
+          description: (description.length === 0) ? categoryName : description,
+          barCode: barCode,
+          id: isEdit ? _id : '',
         },
         success: res => {
           wx.showToast({
@@ -103,19 +132,50 @@ Component({
       wx.scanCode({
         onlyFromCamera: true,
         scanType: ['barCode'],
-        success  :function(res){
+        success: function (res) {
           console.log('scanCode success', res)
           myThis.setData({
             barCode: res.result
           })
         },
-        fail  :function(res){
+        fail: function (res) {
           // console.log('scanCode fail', res)
         },
-        complete  :function(res){
+        complete: function (res) {
           // console.log('scanCode complete', res)
         },
       })
+    },
+    inputNameBlur: function () {
+      const db = wx.cloud.database()
+      if (this.data.categoryName.length !== 0) {
+        wx.cloud.callFunction({
+          name: 'checkName',
+          data: {
+            mode: 'name',
+            categoryName: this.data.categoryName
+          },
+        }).then(res => {
+          console.log('inputNameBlur then', res.result.task)
+          if (res.result.task.length !== 0) {
+            wx.vibrateShort()
+            wx.showToast({
+              title: '名称已存在！',
+              icon: 'none',
+            })
+            this.setData({
+              isEdit: true,
+              barCode: res.result.task[0].barCode,
+              description: res.result.task[0].description,
+              unit: res.result.task[0].unit,
+              _id: res.result.task[0]._id,
+              categoryName: res.result.task[0].categoryName,
+            })
+          }
+        }).catch(err => {
+          console.log('inputNameBlur catch', err)
+        })
+      }
     },
   }
 })

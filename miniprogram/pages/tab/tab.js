@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    active: 'addrecord',
+    active: 'addcategory',
     nbFrontColor: '#000000',
     nbBackgroundColor: '#ffffff',
   },
@@ -88,7 +88,6 @@ Page({
   },
   showIconName(event) {
     const { active } = event.currentTarget.dataset
-
     wx.vibrateShort()
     if (active === 'addcatagory') {
       wx.showToast({
@@ -124,8 +123,10 @@ Page({
             defaultCategoryList.push(item)
           })
           getApp().globalData.defaultCategoryList = defaultCategoryList
-           const list = this.selectComponent('#list')
+          const list = this.selectComponent('#list')
+          const addrecord = this.selectComponent('#addrecord')
           list.getCategoryList()
+          addrecord.getCategoryList()
         }
       },
       fail: err => {

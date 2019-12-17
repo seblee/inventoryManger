@@ -1,4 +1,4 @@
-<form bindsubmit="formSubmit">
+<form bindsubmit="formSubmit" bindreset="formReset">
   <view class="section">
     <label>
       <text class="item-name-space">名称</text>
@@ -11,6 +11,7 @@
         value="{{categoryName}}"
         maxlength="10"
         bindinput="inputName"
+        bindblur="inputNameBlur"
         placeholder="请输入名称" 
       >
       </input>
@@ -43,9 +44,9 @@
       <text>单位</text> 
     </label>
     <view class="input-field">
-      <picker bindchange="bindPickerChange" value="{{unitIndex}}" range="{{unitArray}}">
+      <picker bindchange="unitPickerChange" value="{{unitIndex}}" range="{{unitArray}}">
         <view class="input-sum">
-          {{unitArray[unitIndex]}}
+          {{unit}}
         </view>
       </picker>
     </view>      
@@ -67,12 +68,15 @@
       </input>
     </view>
   </view>
-  <view class="btn-area">
+  <view wx:if="{{isEdit}}" class="btn-area">
+    <button class="warn" form-type="submit">编辑</button> 
+  </view>
+  <view wx:else class="btn-area">
     <button class="warn" form-type="submit">添加</button> 
   </view>
   <view class="btn-area">
     <button class="warn" bindtap="scanCode">扫码输入序列号</button> 
   </view>
-</form> 
+</form>
 
  

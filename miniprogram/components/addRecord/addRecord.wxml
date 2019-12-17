@@ -1,17 +1,16 @@
-<form bindsubmit="formSubmit">
+<form bindsubmit="formSubmit"  bindreset="formReset">
   <view class="section">
     <view class="label">名称</view>
     <view class="input-field">
-      <input 
-        class="input-sum"
-        name="categoryName"
-        type="text"
-        value="{{categoryName}}"
-        maxlength="10"
-        bindinput="inputName"
-        placeholder="请输入名称" 
-      >
-      </input>
+      <picker
+        bindchange="bindPickerCategory"
+        value="{{pikerIndex}}" 
+        range="{{defaultCategoryList}}"
+        range-key="name">
+        <view class="input-sum">
+          {{defaultCategoryList[pikerIndex].name}}
+        </view>
+      </picker>
     </view>
   </view>
   <view class="section">
@@ -26,18 +25,23 @@
         bindinput="inputBarCode"
         placeholder="条码/或者序列号" 
       >
-      </input>
+      </input> 
     </view>
   </view>
-  <view class="section"> 
-      <view class="label">单位</view>
+  <view class="section">
+    <view class="label">数量</view>
     <view class="input-field">
-      <picker bindchange="bindPickerChange" value="{{unitIndex}}" range="{{unitArray}}">
-        <view class="input-sum">
-          {{unitArray[unitIndex]}}
-        </view>
-      </picker>
-    </view>      
+      <input 
+        class="input-sum"
+        name="count"
+        type="digit"
+        value="{{count}}"
+        maxlength="10"
+        bindinput="inputCount"
+        placeholder="条码/或者序列号" 
+      >
+      </input>
+    </view>
   </view>
   <view class="section">
     <view class="label">描述</view>
