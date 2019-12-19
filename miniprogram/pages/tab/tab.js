@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    active: 'addcategory',
+    active: 'list',
     nbFrontColor: '#000000',
     nbBackgroundColor: '#ffffff',
   },
@@ -114,9 +114,11 @@ Page({
     const defaultCategoryList = []
     wx.cloud.callFunction({
       name: 'getCategory',
-      data: {},
+      data: {
+        mode: 'getCategory'
+      },
       success: res => {
-        console.log('getCategory sucess', res)
+        console.log('getCategory result', res)
         if (res.result.code === 1) {
           const resultList = res.result.data
           resultList.forEach((item) => {
@@ -127,6 +129,34 @@ Page({
           const addrecord = this.selectComponent('#addrecord')
           list.getCategoryList()
           addrecord.getCategoryList()
+          console.log('getCategory CategoryList', defaultCategoryList)
+        }
+      },
+      fail: err => {
+        console.log('getCategory fail', err)
+      }
+    })
+  },
+  getAggregate() {
+    const defaultCategoryList = []
+    wx.cloud.callFunction({
+      name: 'getCategory',
+      data: {
+        mode: 'getAggregate'
+      },
+      success: res => {
+        console.log('getCategory result', res)
+        if (res.result.code === 1) {
+          const resultList = res.result.data
+          resultList.forEach((item) => {
+            defaultCategoryList.push(item)
+          })
+          getApp().globalData.defaultCategoryList = defaultCategoryList
+          const list = this.selectComponent('#list')
+          const addrecord = this.selectComponent('#addrecord')
+          list.getCategoryList()
+          addrecord.getCategoryList()
+          console.log('getCategory CategoryList', defaultCategoryList)
         }
       },
       fail: err => {

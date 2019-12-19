@@ -1,129 +1,120 @@
-// pages/index1/index.js
+//index.js
+const app = getApp()
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-    defaultCategoryList: []
-  },
-  upper(e) {
-    // console.log(e)
-  },
-
-  lower(e) {
-    // console.log(e)
+    avatarUrl: './user-unlogin.png',
+    userInfo: {},
+    logged: false,
+    takeSession: false,
+    requestResult: ''
   },
 
-  scroll(e) {
-    // console.log(e)
-  },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
+  onLoad: function() {
+    if (!wx.cloud) {
+      wx.redirectTo({
+        url: '../chooseLib/chooseLib',
+      })
+      return
+    }
 
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-    this.getCategoryList()
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-    this.getCategoryList()
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
-
-
-  onAddRecord: function () {
-    const db = wx.cloud.database()
-    db.collection('inventoryNote').add({
-      data: {
-        categoryId: '',//类别ID
-        description: '',//备注描述
-        barCode: '',//条码
-        count: 0,
-        isInCome: true,
-        isDel: false,
-        noteDate: new Date(),
-      },
-
+    // 获取用户信息
+    wx.getSetting({
       success: res => {
-        wx.showToast({
-          title: '增加记录成功',
-          icon: 'success',
-          image: '',
-          duration: 1500,
+        if (res.authSetting['scope.userInfo']) {
+          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+          wx.getUserInfo({
+            success: res => {
+              this.setData({
+                avatarUrl: res.userInfo.avatarUrl,
+                userInfo: res.userInfo
+              })
+            }
+          })
+        }
+      }
+    })
+  },
+
+  onGetUserInfo: function(e) {
+    if (!this.data.logged && e.detail.userInfo) {
+      this.setData({
+        logged: true,
+        avatarUrl: e.detail.userInfo.avatarUrl,
+        userInfo: e.detail.userInfo
+      })
+    }
+  },
+
+  onGetOpenid: function() {
+    // 调用云函数
+    wx.cloud.callFunction({
+      name: 'login',
+      data: {},
+      success: res => {
+        console.log('[云函数] [login] user openid: ', res.result.openid)
+        app.globalData.openid = res.result.openid
+        wx.navigateTo({
+          url: '../userConsole/userConsole',
         })
-        console.log('onAddRecord success', res)
       },
       fail: err => {
-        console.log('onAddRecord fail', err)
-        wx.showToast({
-          title: '添加失败',
-          icon: 'none',
-          image: '',
-          duration: 1500,
+        console.error('[云函数] [login] 调用失败', err)
+        wx.navigateTo({
+          url: '../deployFunctions/deployFunctions',
         })
       }
     })
-
   },
-  getCategoryList() {
 
-    this.setData({
-      defaultCategoryList: getApp().globalData.defaultCategoryList,
+  // 上传图片
+  doUpload: function () {
+    // 选择图片
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: function (res) {
+
+        wx.showLoading({
+          title: '上传中',
+        })
+
+        const filePath = res.tempFilePaths[0]
+        
+        // 上传图片
+        const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
+        wx.cloud.uploadFile({
+          cloudPath,
+          filePath,
+          success: res => {
+            console.log('[上传文件] 成功：', res)
+
+            app.globalData.fileID = res.fileID
+            app.globalData.cloudPath = cloudPath
+            app.globalData.imagePath = filePath
+            
+            wx.navigateTo({
+              url: '../storageConsole/storageConsole'
+            })
+          },
+          fail: e => {
+            console.error('[上传文件] 失败：', e)
+            wx.showToast({
+              icon: 'none',
+              title: '上传失败',
+            })
+          },
+          complete: () => {
+            wx.hideLoading()
+          }
+        })
+
+      },
+      fail: e => {
+        console.error(e)
+      }
     })
-    console.log('defaultCategoryList', this.data.defaultCategoryList)
   },
-  control(e) {
-    const { mode } = e.currentTarget.dataset
-    switch (mode) {
-      case 'reset': this.getCategoryList()       
-        break
-    }
-
-  },
-
 
 })

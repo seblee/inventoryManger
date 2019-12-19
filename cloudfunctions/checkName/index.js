@@ -13,7 +13,12 @@ exports.main = async (event, context) => {
   const $ = db.command.aggregate
 
 
-  const countResult = await db.collection('inventoryCategory').count()
+  const countResult = await db.collection('inventoryCategory')
+    .where({
+      _openid: wxContext.OPENID,
+      isDel: false,
+      categoryName: event.categoryName,
+    }).count()
   const total = countResult.total
   //计算分几次
   const batchTimes = Math.ceil(total / 100)
@@ -28,11 +33,10 @@ exports.main = async (event, context) => {
         categoryName: event.categoryName,
       }).skip(i * MAX_LIMIT)
       .limit(MAX_LIMIT)
-      .get() 
-    for (let j = 0; j < promise.data.length;j++)
-    {
-      task.push(promise.data[j])
-    }  
+      .get()
+      promise.data.forEach((item)=>{
+        task.push(item)
+      })
   }
   return {
     event,

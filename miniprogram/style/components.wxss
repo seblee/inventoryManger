@@ -15,7 +15,7 @@
   flex-wrap: nowrap;
   flex-shrink:0
 }
-.section input {
+.section .input {
   /* padding: 20rpx 0; */
   height: 80rpx;
   text-align: right;
@@ -30,12 +30,13 @@
 }
 .input-sum, .default-text {
   font-size: 46rpx;
+  text-align: right;
 } 
 
 .btn-area {
   text-align: center;
 }
-.btn-area button {
+.btn-area .warn   {
   border: 1px solid transparent;
   border-radius: 9rpx;
   font-size: 45rpx;
@@ -48,10 +49,9 @@
   line-height: normal;
   width: 90%;
   margin: 40rpx 0 0rpx;
-}
-.warn {
   background-color: #ffdd57;
 }
+
 .icon-scon {
   width: 40rpx;
   height: 40rpx;

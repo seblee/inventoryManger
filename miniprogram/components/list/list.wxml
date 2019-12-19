@@ -18,7 +18,7 @@
       style="{{item._id === editItem._id && showMenuDialog ? 'border: 4rpx solid #f75676; padding: 16rpx 26rpx;' : ''}}">
 
       <view class="type-date">
-        <view class="type">{{item.name}}</view>
+        <view class="type">{{item.categoryName}}</view>
         <view class="description" wx:if="{{item.description}}">{{item.description}}</view>
       </view>
       <view class="money-date">
@@ -40,15 +40,15 @@
   </scroll-view>
  
 
-
+  <!-- 云调用 --> 
+  <view class="button"> 
+    <button bindtap="getAggregate" class="uploader-text"> 
+      <text>test</text> 
+    </button> 
+  </view> 
  
 
-  <!-- 云调用 -->
-  <view class="button">
-    <button bindtap="onAddRecord" class="uploader-text">
-      <text>增加记录</text>
-    </button>
-  </view>
+ 
 
   <!-- 云调用 -->
   <view class="uploader">

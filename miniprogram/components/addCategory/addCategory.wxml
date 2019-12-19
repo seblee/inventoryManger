@@ -68,11 +68,8 @@
       </input>
     </view>
   </view>
-  <view wx:if="{{isEdit}}" class="btn-area">
-    <button class="warn" form-type="submit">编辑</button> 
-  </view>
-  <view wx:else class="btn-area">
-    <button class="warn" form-type="submit">添加</button> 
+  <view class="btn-area">
+    <button class="warn" form-type="submit">{{isEdit ? '编辑' : '添加'}}</button> 
   </view>
   <view class="btn-area">
     <button class="warn" bindtap="scanCode">扫码输入序列号</button> 

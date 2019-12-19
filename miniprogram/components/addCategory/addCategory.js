@@ -45,13 +45,14 @@ Component({
         return
       }
       this.onAddCategory()
-      this.formReset()
+      // this.formReset()
     },
     formReset: function () {
       this.setData({
         description: '',
         categoryName: '',
         barCode: '',
+        isEdit:false,
       })
     },
     /**
@@ -95,9 +96,9 @@ Component({
      * 添加物品类型
      */
     onAddCategory: function (data) {
-      const db = wx.cloud.database()
       const { _id, categoryName, unit, description, barCode, isEdit } = this.data;
-      db.collection('inventoryCategory').add({
+      wx.cloud.callFunction({
+        name: 'addEditCategory',
         data: {
           categoryName: categoryName,
           unit: unit,
@@ -105,27 +106,28 @@ Component({
           noteDate: new Date(),
           description: (description.length === 0) ? categoryName : description,
           barCode: barCode,
-          id: isEdit ? _id : '',
-        },
-        success: res => {
-          wx.showToast({
-            title: '增加物品名称成功',
-            icon: 'success',
-            image: '',
-            duration: 1500,
-          })
-          console.log('onAdd success', res)
-        },
-        fail: err => {
-          console.log('onAdd fail', err)
-          wx.showToast({
-            title: '添加失败',
-            icon: 'none',
-            image: '',
-            duration: 1500,
-          })
+          _id: isEdit ? _id : '',
+          isEdit: isEdit,
         }
+      }).then(res => {
+        console.log('onAddCategory res:', res)
+        wx.showToast({
+          title: isEdit ? '😬修改成功' : '😉成功新增一个类型',
+          icon: 'success',
+          image: '',
+          duration: 1500,
+        })
+       this.formReset()
+      }).catch(err => {
+        console.log('onAddCategory err:', err)
+        wx.showToast({
+          title: isEdit ? '😬修改失败' : '😉新增一个类型失败',
+          icon: 'none',
+          image: '',
+          duration: 1500,
+        })
       })
+      return  
     },
     scanCode: function () {
       var myThis = this;

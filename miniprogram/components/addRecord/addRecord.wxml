@@ -6,9 +6,9 @@
         bindchange="bindPickerCategory"
         value="{{pikerIndex}}" 
         range="{{defaultCategoryList}}"
-        range-key="name">
+        range-key="categoryName">
         <view class="input-sum">
-          {{defaultCategoryList[pikerIndex].name}}
+          {{defaultCategoryList[pikerIndex].categoryName}}
         </view>
       </picker>
     </view>

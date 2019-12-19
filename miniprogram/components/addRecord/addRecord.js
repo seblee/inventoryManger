@@ -43,7 +43,7 @@ Component({
         })
         return
       }
-      this.onAddCategory()
+      this.onAddRecord()
     },
 
     /**
@@ -75,19 +75,21 @@ Component({
      */
     inputCount: function (e) {
       this.setData({
-        count: e.detail.value
+        count:( e.detail.value)
       })
     },
     getCategoryList() {
       this.setData({
         defaultCategoryList: getApp().globalData.defaultCategoryList,
       })
-      console.log('defaultCategoryList', this.data.defaultCategoryList)
-      this.setNameDatas()
+
+      if (this.data.defaultCategoryList.length !== 0) {
+        this.setNameDatas()
+      }
     },
     setNameDatas: function () {
       this.setData({
-        categoryName: this.data.defaultCategoryList[this.data.pikerIndex].name,
+        categoryName: this.data.defaultCategoryList[this.data.pikerIndex].categoryName,
         barCode: this.data.defaultCategoryList[this.data.pikerIndex].barCode,
       })
     },
@@ -98,7 +100,7 @@ Component({
           categoryId: this.data.defaultCategoryList[this.data.pikerIndex]._id,//类别ID
           description: this.data.description,//备注描述
           barCode: this.data.barCode,//条码
-          count: this.data.count,
+          count:Number(this.data.count),
           isInCome: true,
           isDel: false,
           noteDate: new Date(),
