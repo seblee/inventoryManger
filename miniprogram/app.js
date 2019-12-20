@@ -12,7 +12,7 @@ App({
         //   如不填则使用默认环境（第一个创建的环境）
         env: 'cashbook-sw74a',
         traceUser: true,
-      })      
+      })
     }
 
 
@@ -37,7 +37,7 @@ App({
   },
   globalData: {
     categoryList: [],
-    defaultCategoryList: []
+    defaultCategoryList: [],
   },
   onGetOpenid: function () {
     // 调用云函数
@@ -53,6 +53,5 @@ App({
       }
     })
   },
-
-
 })
+

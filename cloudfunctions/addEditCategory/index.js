@@ -36,7 +36,7 @@ exports.main = async (event, context) => {
             description: description,
             barCode: barCode,
           }
-        })     
+        })
       return {
         res,
         event,
@@ -73,3 +73,4 @@ exports.main = async (event, context) => {
     }
   }
 }
+

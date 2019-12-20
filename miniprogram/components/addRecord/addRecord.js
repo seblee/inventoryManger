@@ -14,9 +14,15 @@ Component({
     categoryName: '',
     barCode: '',
     count: 0,
+    inPutCount: 0,
     description: '',
     defaultCategoryList: [],
     pikerIndex: 0,
+    isInCome: true,
+    isInComeItems: [
+      { name: 'in', value: '入库', checked: 'true' },
+      { name: 'out', value: '出库' },
+    ]
   },
 
   lifetimes: {
@@ -58,7 +64,13 @@ Component({
         pikerIndex: 0,
       })
     },
+    radioChange: function (e) {
+      this.setData({
+        isInCome: e.detail.value === 'in' ? true : false
+      })
+      console.log('this.data.isInCome ', this.data.isInCome)
 
+    },
     /**
      * bindPickerCategory 函数
      */
@@ -73,10 +85,12 @@ Component({
     /**
      * input 输入触发函数
      */
-    inputCount: function (e) {
+    onInputCount: function (e) {
+
       this.setData({
-        count:( e.detail.value)
+        count: Number(e.detail.value)
       })
+      console.log('this.data.count ', this.data.count)
     },
     getCategoryList() {
       this.setData({
@@ -100,8 +114,8 @@ Component({
           categoryId: this.data.defaultCategoryList[this.data.pikerIndex]._id,//类别ID
           description: this.data.description,//备注描述
           barCode: this.data.barCode,//条码
-          count:Number(this.data.count),
-          isInCome: true,
+          count: this.data.isInCome ? this.data.count : -this.data.count,
+          isInCome: this.data.isInCome,
           isDel: false,
           noteDate: new Date(),
         },
@@ -128,3 +142,4 @@ Component({
     },
   }
 })
+

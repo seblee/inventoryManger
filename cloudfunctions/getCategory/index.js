@@ -11,9 +11,7 @@ exports.main = async (event, context) => {
   const _ = db.command;
   const $ = db.command.aggregate
   const { mode } = event
-  var categoryList = []
-  var list = []
-  var code = 0
+
   if (mode === 'getCategory') {
     try {
       const self = this
@@ -64,16 +62,36 @@ exports.main = async (event, context) => {
       })
       .match({
         isDel: false,
-        _openid: wxContext.OPENID
+        _openid: 'owS4l0eJ9NtNF9Xl8QExspW94CS8',
+        // categoryId: '72527ac65df9d8cd047d85f224f828d3',
       })
       .group({
         _id: {
           categoryId: '$categoryId',
-          isInCome: '$isInCome',
         },
         totalSum: $.sum('$count'),
       })
+      .replaceRoot({
+        newRoot: $.mergeObjects(['$_id', '$$ROOT'])
+      })
+      .project({
+        _id: 0
+      })
+      .lookup({
+        from: 'inventoryCategory',
+        localField: 'categoryId',
+        foreignField: '_id',
+        as: 'totalList'
+      })
+      .replaceRoot({
+        newRoot: $.mergeObjects([$.arrayElemAt(['$totalList', 0]), '$$ROOT'])
+      })
+      .project({
+        totalList: 0,
+        noteDate: 0,
+        categoryId: 0
+      })
       .end()
-    return  aggregateResult
+    return aggregateResult
   }
 }

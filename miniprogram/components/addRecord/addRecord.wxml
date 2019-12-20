@@ -1,5 +1,14 @@
 <form bindsubmit="formSubmit"  bindreset="formReset">
   <view class="section">
+  
+<radio-group class="radio-group" bindchange="radioChange">
+      <radio class="label" wx:for-items="{{isInComeItems}}" wx:key="name" value="{{item.name}}" checked="{{item.checked}}">
+         <view class="label">{{item.value}}</view>
+      </radio>
+    </radio-group>
+  
+  </view>
+    <view class="section">
     <view class="label">名称</view>
     <view class="input-field">
       <picker
@@ -33,11 +42,11 @@
     <view class="input-field">
       <input 
         class="input-sum"
-        name="count"
+        name="inPutCount"
         type="digit"
-        value="{{count}}"
+        value="{{inPutCount}}"
         maxlength="10"
-        bindinput="inputCount"
+        bindinput="onInputCount"
         placeholder="条码/或者序列号" 
       >
       </input>

@@ -21,7 +21,7 @@ Page({
       nbBackgroundColor: '#000000',
     })
 
-    this.getCategory()
+    this.getAggregate()
   },
 
   /**
@@ -108,8 +108,9 @@ Page({
       })
     }
   },
-
-
+  /**
+   * 获取物品名称
+   */
   getCategory() {
     const defaultCategoryList = []
     wx.cloud.callFunction({
@@ -129,7 +130,7 @@ Page({
           const addrecord = this.selectComponent('#addrecord')
           list.getCategoryList()
           addrecord.getCategoryList()
-          console.log('getCategory CategoryList', defaultCategoryList)
+          console.log('getCategory CategoryList', defaultCategoryList)         
         }
       },
       fail: err => {
@@ -137,6 +138,9 @@ Page({
       }
     })
   },
+  /**
+   * 获取在库物品
+   */
   getAggregate() {
     const defaultCategoryList = []
     wx.cloud.callFunction({
@@ -145,19 +149,17 @@ Page({
         mode: 'getAggregate'
       },
       success: res => {
-        console.log('getCategory result', res)
-        if (res.result.code === 1) {
-          const resultList = res.result.data
-          resultList.forEach((item) => {
-            defaultCategoryList.push(item)
-          })
-          getApp().globalData.defaultCategoryList = defaultCategoryList
-          const list = this.selectComponent('#list')
-          const addrecord = this.selectComponent('#addrecord')
-          list.getCategoryList()
-          addrecord.getCategoryList()
-          console.log('getCategory CategoryList', defaultCategoryList)
-        }
+        console.log('getAggregate list', res.result.list)
+        const resultList = res.result.list
+        resultList.forEach((item) => {
+          defaultCategoryList.push(item)
+        })
+        getApp().globalData.defaultCategoryList = defaultCategoryList
+        const list = this.selectComponent('#list')
+        const addrecord = this.selectComponent('#addrecord')
+        list.getCategoryList()
+        addrecord.getCategoryList()
+        console.log('getCategory defaultCategoryList', defaultCategoryList)
       },
       fail: err => {
         console.log('getCategory fail', err)
